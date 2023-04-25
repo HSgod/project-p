@@ -92,6 +92,7 @@ const select = {
       thisProduct.formInputs = thisProduct.form.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
 
     initAccordion() {
@@ -104,11 +105,11 @@ const select = {
         event.preventDefault();
 
         /* find active product (product that has active class) */
-        const activeProduct = document.querySelector(classNames.menuProduct.wrapperActive);
+        const activeProduct = document.querySelector(select.all.menuProductsActive);
 
         /* if there is active product and it's not thisProduct.element, remove class active from it */
         if (activeProduct && activeProduct != thisProduct.element) {
-          thisProduct.element.classList.remove('active');
+          activeProduct.classList.remove('active');
         }
 
         /* toggle active class on thisProduct.element */
@@ -154,14 +155,24 @@ const select = {
         for (let optionId in param.options) {
           // determine option value
           const option = param.options[optionId];
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          const optionSelected = formData[paramId] && formData[paramId].includes(optionId);
 
-          if(formData[paramId] && formData[paramId].includes(optionId)) {
+          if(optionSelected) {
             if(!option.default) {
               price += option.price;
             }
           } else {
             if(option.default) {
               price -= option.price;
+            }
+          }
+
+          if(optionImage) {
+            if(optionSelected) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            } else {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
             }
           }
         }
