@@ -222,10 +222,10 @@ const select = {
       }
 
       // multiply price by amount
+      thisProduct.priceSingle = price;
       price *= thisProduct.amountWidget.value;
 
       // update calculated price in the HTML
-      thisProduct.priceSingle = price;
       thisProduct.priceElem.innerHTML = price;
     }
 
