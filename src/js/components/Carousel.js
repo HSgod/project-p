@@ -15,6 +15,7 @@ class Carousel {
         thisCarousel.dom.carousel = document.querySelector(select.home.carouselPlugin);
         console.log(thisCarousel.dom.carousel);
     
+        // eslint-disable-next-line no-unused-vars, no-undef
         const flkty = new Flickity( thisCarousel.dom.carousel, {
           cellAlign: 'left',
           contain: true,

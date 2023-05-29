@@ -8,10 +8,11 @@ class Booking {
     constructor(element) {
         const thisBooking = this;
 
+        thisBooking.selectedTable = '';
+
         thisBooking.render(element);
         thisBooking.initWidgets();
         thisBooking.getData();
-        thisBooking.initTables();
     }
 
     getData() {
@@ -111,6 +112,8 @@ class Booking {
     updateDOM() {
         const thisBooking = this;
 
+        thisBooking.resetSelectedTables();
+
         thisBooking.date = thisBooking.datePicker.value;
         thisBooking.hour = utils.hourToNumber(thisBooking.hourPicker.value);
 
@@ -151,29 +154,28 @@ class Booking {
         thisBooking.dom.floor = thisBooking.dom.wrapper.querySelector(select.booking.floor);
     }
 
-    initTables() {
+    initTables(event) {
         const thisBooking = this;
 
-        thisBooking.dom.floor.addEventListener('click', function(event) {
-            event.preventDefault();
-
-            if (event.target.classList.contains(classNames.booking.table)) {
-
-                const tableId = event.target.getAttribute(settings.booking.tableIdAttribute);
-
-                if (event.target.classList.contains(classNames.booking.tableBooked)) {
-                    alert('Select another table');
-                } else {
-                    for (let table of thisBooking.dom.tables) {
-                        if (table.classList.contains(classNames.booking.tableSelected)) {
-                            table.classList.remove(classNames.booking.tableSelected);
-                        }
-                    }
-                    event.target.classList.add(classNames.booking.tableSelected);
-                    thisBooking.selectedTable = tableId;
-                }
+        const tableId = event.getAttribute(settings.booking.tableIdAttribute);
+        const table = tableId && event.classList.value.includes(classNames.booking.table);
+        const bookedTable =  event.classList.value.includes(classNames.booking.tableBooked);
+        const selectedTable = event.classList.value.includes(classNames.booking.tableSelected);
+        
+        if (table && !bookedTable) {
+            if(selectedTable) {
+                thisBooking.resetSelectedTables();
+                thisBooking.selectedTable = '';
+            } else {
+                thisBooking.resetSelectedTables();
+                event.classList.add(classNames.booking.tableSelected);
+                thisBooking.selectedTable = tableId;
             }
-        });
+        }
+
+        if (table && bookedTable){
+            alert('Choose another table');
+        }
     }
 
     resetSelectedTables() {
@@ -213,7 +215,7 @@ class Booking {
         });
 
         thisBooking.dom.floor.addEventListener('click', function(event) {
-            thisBooking.initTables();
+            thisBooking.initTables(event.target);
         });
     }
 }
