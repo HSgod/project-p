@@ -47,6 +47,10 @@ export const select = {
       tables: '.floor-plan .table',
       floor: '.floor-plan',
       selected: '.selected',
+      submit: '.booking-form',
+      starters: 'input[type="checkbox"]',
+      phone: 'input[name="phone"]',
+      address: 'input[name="address"]',
     },
     home: {
       carouselPlugin: '.main-carousel',
